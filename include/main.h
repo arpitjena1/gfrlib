@@ -36,6 +36,8 @@
 
 #include "api.h"
 #include "gfr/api.h"
+#include "autonomous.hpp"
+#include "driver.hpp"
 
 /**
  * You should add more #includes here
