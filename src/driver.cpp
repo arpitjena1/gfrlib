@@ -16,5 +16,6 @@ void opcontrol() {
 		right_mtr = right;
 
 		pros::delay(20);
+		
 	}
 }

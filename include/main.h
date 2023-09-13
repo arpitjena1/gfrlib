@@ -38,6 +38,8 @@
 #include "gfr/api.h"
 #include "autonomous.hpp"
 #include "driver.hpp"
+#include "globals.hpp"
+#include "triballcontrol.h"
 
 /**
  * You should add more #includes here
