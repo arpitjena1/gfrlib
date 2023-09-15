@@ -18,7 +18,8 @@ All credit for Eigen goes to the Eigen team. See their [project page](https://ei
 
 Want a different version of Eigen? Let us know by opening an issue [here](https://github.com/LemLib/Eigen/issues/new)
 
-# Contributions to the ARMS and LemLib team for movement algorithms.
+## File Struct
+coming soon!
 
 ---
 #### _Contributions welcome. Anything missing? Send in a pull request. Thanks._
