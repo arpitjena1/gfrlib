@@ -18,8 +18,41 @@ All credit for Eigen goes to the Eigen team. See their [project page](https://ei
 
 Want a different version of Eigen? Let us know by opening an issue [here](https://github.com/LemLib/Eigen/issues/new)
 
-## File Struct
-coming soon!
+## Perks
+ > Extended pneumatics class for solenoids
+ > State Machines
+
+## Movement Functions
+### boomerang
+ ```
+
+  using namespace gfr::chassis;
+  move({{24,24,90}}, 127, gfr::ASYNC|gfr::THRU);
+
+```
+> Movement flags such as ASYNC to support asynchronous actions
+
+### pure pursuit
+```
+  
+  using namespace gfr::chassis;
+  ASSET(path_txt)
+  follow(path_txt,3000,10,true);
+
+```
+> Build paths on LemLib's path gen!
+
+### Ramsete
+```
+
+  std::vector<gfr::Pose> *poses;
+	
+	Pose pose1 = {1,2,3};
+	poses->push_back(pose1);
+
+	FollowPath(poses,3000,200,10,10,false);
+
+```
 
 ---
 #### _Contributions welcome. Anything missing? Send in a pull request. Thanks._
