@@ -13,7 +13,7 @@ namespace gfr {
 #define LEFT_MOTORS 1, 2
 #define RIGHT_MOTORS -3, -4
 #define GEARSET pros::E_MOTOR_GEAR_200 // RPM of chassis motors
-
+#define WHEEL_DIAM 3.25
 
 // Ticks per inch
 #define TPI 1      			  // Encoder ticks per inch of forward robot movement

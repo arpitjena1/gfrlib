@@ -8,6 +8,7 @@
 #include "pose.h"
 #include <memory>
 #include "../api.h"
+#include "Eigen/Eigen"
 
 namespace gfr::chassis {
 
@@ -60,6 +61,7 @@ void turn(double target, double max, double exit_error, MoveFlags = NONE);
 void turn(double target, double max, MoveFlags = NONE);
 void turn(double target, MoveFlags = NONE);
 
+void chainedmoveto(std::vector<Pose> points, double max, MoveFlags flags );
 /**
  * Turn to face a point
  */

@@ -6,6 +6,52 @@
 
 namespace gfr::chassis {
 
+void moveChassis(float linearVelocity, float angularVelocity) {
+    // compute left and right velocities
+    float leftVelocity = (2 * linearVelocity - angularVelocity * TRACK_WIDTH) / 2; // inches/sec
+    float rightVelocity = (2 * linearVelocity + angularVelocity * TRACK_WIDTH) / 2; // inches/sec
+
+    // calculate left and right wheel rpm
+    float leftRPM = leftVelocity * 60.0 / (WHEEL_DIAM * M_PI); // rpm
+    float rightRPM = rightVelocity * 60.0 / (WHEEL_DIAM * M_PI); // rpm
+
+    // calculate the left and right motor rpm(gear ratio)
+    float leftMotorRPM = leftRPM * (3/5);
+    float rightMotorRPM = rightRPM * (3/5);
+
+    // move chassis
+    leftMotors->move_velocity(leftMotorRPM);
+    rightMotors->move_velocity(rightMotorRPM);
+}
+
+double distancecalc(Pose a , Pose b ){
+	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
+}
+
+double anglecalc(Pose a, Pose b){
+	double targetAngle = atan2(b.y - a.y, b.x - a.x);
+	return radToDeg(targetAngle);
+	
+}
+double wrap180(double deg)
+{
+    while (deg > 180 || deg < -180)
+    {
+        if (deg > 180)
+        {
+            deg -= 360;
+        }
+
+        else if (deg < -180)
+        {
+            deg += 360;
+        }
+    }
+
+    return deg;
+}
+
+
 // chassis motors
 std::shared_ptr<pros::Motor_Group> leftMotors;
 std::shared_ptr<pros::Motor_Group> rightMotors;
@@ -248,6 +294,105 @@ void turn(double target, double max, MoveFlags flags) {
 
 void turn(double target, MoveFlags flags) {
 	turn(target, 100, angular_exit_error, -1, flags);
+}
+
+/**************************************************/
+// chained mtp
+
+void chainedmoveto(std::vector<Pose> points, double max, MoveFlags flags ){
+
+	int iter = 0;
+	for(Pose p; points){
+		if(p == points.back()){
+			move({{p.x, p.y}},max,gfr::NONE);
+		} else{
+			move({{p.x, p.y}},max,flags);
+		}
+		
+	}
+
+
+	
+
+}
+void ramsete(gfr::Pose targetPose, gfr::Pose currentPose, float targetAngularVelocity, float targetLinearVelocity, float beta, float zeta) {
+    // compute global error
+    Eigen::MatrixXd globalError(1, 3);
+    globalError <<
+        targetPose.x - currentPose.x,
+        targetPose.y - currentPose.y,
+        targetPose.theta - currentPose.theta;
+
+    // compute transformation matrix
+    Eigen::MatrixXd transformationMatrix(3, 3);
+    transformationMatrix <<
+        cos(currentPose.theta),  sin(currentPose.theta), 0,
+        -sin(currentPose.theta), cos(currentPose.theta), 0,
+        0,                       0,                      1;
+
+    // compute local error
+    Eigen::MatrixXd localError = globalError * transformationMatrix;
+    // compute k gain
+    float k = 2 * zeta * std::sqrt(targetAngularVelocity * targetAngularVelocity + beta + targetLinearVelocity * targetLinearVelocity);
+    // compute angular velocity
+    float angularVelocity = targetAngularVelocity * cos(localError(0, 2)) + k * localError(0, 0);
+    // compute linear velocity
+    float linearVelocity = targetLinearVelocity + k * localError(0, 2) + (beta * linearVelocity * sin(localError(0, 2)) * localError(0, 1) / localError(0, 2));
+
+    // move chassis
+    moveChassis(linearVelocity, angularVelocity);
+}
+int findClosest(gfr::Pose pose, std::vector<gfr::Pose>* pPath, int prevCloseIndex=0) {
+    //Find the closest point to the robot
+    int closeIndex = 0;
+    float minDistance = INT_MAX;
+    for(int i = prevCloseIndex; i<pPath->size(); i++){
+        float dist = pose.distance(pPath->at(i));
+        if(dist < minDistance){
+            closeIndex = i;
+            minDistance = dist;
+        }
+    }
+    return closeIndex;
+}
+void FollowPath(std::vector<gfr::Pose>* pPath, float timeOut, float errorRange, float beta, float zeta, bool reversed = false){
+    float offFromPose = INT_MAX;
+    
+    // set up the timer
+    timeOut *= CLOCKS_PER_SEC;
+    clock_t startTime = clock(); 
+    float runtime = 0;
+
+    // initialise loop variables
+    int prevCloseIndex=0;
+	
+
+    // keep running the controller until either time expires or the bot is within the error range
+    while(runtime <= timeOut && offFromPose >= errorRange){
+        // update runtime
+        runtime = clock() - startTime;
+
+		//current pose
+        Pose pose = gfr::odom::getPose();
+
+
+        // find the closest index
+        int closeIndex = findClosest(pose, pPath, prevCloseIndex);
+
+        // get the closest pose velocities
+        gfr::Pose closestPose = pPath->at(closeIndex);
+        float targetAngularVelocity = closestPose.angularVel;
+        float targetLinearVelocity = closestPose.linearVel;
+        
+        // set the desired pose to one ahead (so the robot is always moving forward) *****TEST******
+        int targetIndex = std::min(closeIndex+1, (int)pPath->size()-1); // ensures no out of range error
+        gfr::Pose targetPose = pPath->at(targetIndex);
+
+        // run the controller function
+        ramsete(targetPose, pose, targetAngularVelocity, targetLinearVelocity, beta, zeta);
+
+        pros::delay(20);
+    }
 }
 
 /**************************************************/
