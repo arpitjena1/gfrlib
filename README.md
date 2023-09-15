@@ -53,6 +53,7 @@ Want a different version of Eigen? Let us know by opening an issue [here](https:
 	FollowPath(poses,3000,200,10,10,false);
 
 ```
+> Plug-in points and push back for the robot to follow the trajectory!
 
 ---
 #### _Contributions welcome. Anything missing? Send in a pull request. Thanks._
