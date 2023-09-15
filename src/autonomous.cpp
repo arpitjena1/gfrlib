@@ -15,8 +15,16 @@ void autonomous() {
 	intake.move(127);
 	waitUntilFinished(2);
 
-	//ramsete
+	//chained
 	chainedmoveto({{Pose{10,10,10}},Pose(20,20,20)},100,gfr::THRU);
+
+	//ramsete
+	std::vector<gfr::Pose> *poses;
+	
+	Pose pose1 = {1,2,3};
+	poses->push_back(pose1);
+
+	FollowPath(poses,3000,200,10,10,false);
 
 	
 }
