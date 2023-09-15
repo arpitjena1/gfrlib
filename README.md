@@ -41,7 +41,7 @@ Want a different version of Eigen? Let us know by opening an issue [here](https:
   follow(path_txt,3000,10,true);
 
 ```
-> Build paths on LemLib's path gen!
+> Build paths on [LemLib's path gen](https://lemlib.github.io/Path-Gen/)
 
 ### Ramsete
 ```
