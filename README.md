@@ -19,7 +19,7 @@ All credit for Eigen goes to the Eigen team. See their [project page](https://ei
 Want a different version of Eigen? Let us know by opening an issue [here](https://github.com/LemLib/Eigen/issues/new)
 
 ## Perks
- > Extended pneumatics class for solenoids
+ > Extended pneumatics class for solenoids &
  > State Machines
 
 ## Movement Functions
