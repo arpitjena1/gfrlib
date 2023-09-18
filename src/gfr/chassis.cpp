@@ -301,20 +301,13 @@ void turn(double target, MoveFlags flags) {
 
 void chainedmoveto(std::vector<Pose> points, double max, MoveFlags flags ){
 
-	int iter = 0;
-	for(Pose p; points){
-		if(p == points.back()){
-			move({{p.x, p.y}},max,gfr::NONE);
-		} else{
-			move({{p.x, p.y}},max,flags);
-		}
-		
-	}
+	
 
 
 	
 
 }
+gfr::Pose keepvelcheck(0,0,0);
 void ramsete(gfr::Pose targetPose, gfr::Pose currentPose, float targetAngularVelocity, float targetLinearVelocity, float beta, float zeta) {
     // compute global error
     Eigen::MatrixXd globalError(1, 3);
@@ -338,7 +331,8 @@ void ramsete(gfr::Pose targetPose, gfr::Pose currentPose, float targetAngularVel
     float angularVelocity = targetAngularVelocity * cos(localError(0, 2)) + k * localError(0, 0);
     // compute linear velocity
     float linearVelocity = targetLinearVelocity + k * localError(0, 2) + (beta * linearVelocity * sin(localError(0, 2)) * localError(0, 1) / localError(0, 2));
-
+	
+	keepvelcheck.returnvalues(angularVelocity, linearVelocity);
     // move chassis
     moveChassis(linearVelocity, angularVelocity);
 }
@@ -373,21 +367,21 @@ void FollowPath(std::vector<gfr::Pose>* pPath, float timeOut, float errorRange, 
         runtime = clock() - startTime;
 
 		//current pose
-        Pose pose = gfr::odom::getPose();
+        Pose pose = gfr::odom::getPose(false);
 
 
         // find the closest index
         int closeIndex = findClosest(pose, pPath, prevCloseIndex);
 
-        // get the closest pose velocities
-        gfr::Pose closestPose = pPath->at(closeIndex);
-        float targetAngularVelocity = closestPose.angularVel;
-        float targetLinearVelocity = closestPose.linearVel;
+        auto closestPose = pPath->at(closeIndex);
+
         
         // set the desired pose to one ahead (so the robot is always moving forward) *****TEST******
         int targetIndex = std::min(closeIndex+1, (int)pPath->size()-1); // ensures no out of range error
         gfr::Pose targetPose = pPath->at(targetIndex);
 
+		float targetAngularVelocity = keepvelcheck.x;
+		float targetLinearVelocity = keepvelcheck.y;
         // run the controller function
         ramsete(targetPose, pose, targetAngularVelocity, targetLinearVelocity, beta, zeta);
 

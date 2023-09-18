@@ -22,7 +22,8 @@ typedef struct config_data_s {
 // sensors
 extern std::shared_ptr<pros::Imu> imu;
 
-Pose getPose(bool radians = false);
+
+Pose getPose(bool radians);
 /**
  * Return the left encoder position
  */

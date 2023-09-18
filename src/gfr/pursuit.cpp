@@ -5,12 +5,8 @@
 // Here is a link to the original document
 // https://www.chiefdelphi.com/uploads/default/original/3X/b/e/be0e06de00e07db66f97686505c3f4dde2e332dc.pdf
 
-#include <cmath>
-#include <vector>
-#include <string>
-#include "pros/misc.hpp"
-#include "gfr/asset.h"
-#include "gfr/api.h"
+#include "pursuit.h"
+
 
 /**
  * @brief function that returns elements in a file line, separated by a delimeter
@@ -161,7 +157,7 @@ gfr::Pose lookaheadPoint(gfr::Pose lastLookahead, gfr::Pose pose, std::vector<gf
  */
 double findLookaheadCurvature(gfr::Pose pose, double heading, gfr::Pose lookahead) {
     // calculate whether the robot is on the left or right side of the circle
-    double side = gfr::sgn(std::sin(heading) * (lookahead.x - pose.x) - std::cos(heading) * (lookahead.y - pose.y));
+    double side = sgn(std::sin(heading) * (lookahead.x - pose.x) - std::cos(heading) * (lookahead.y - pose.y));
     // calculate center point and radius
     double a = -std::tan(heading);
     double c = std::tan(heading) * pose.x - pose.y;
@@ -201,7 +197,8 @@ void gfr::chassis::follow(asset path, int timeout, float lookahead, bool reverse
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState; i++) {
         // get the current position of the robot
-        pose = gfr::odom::getPose(true);
+        auto pose = gfr::odom::getPose(true);
+        
         if (reverse) pose.theta -= M_PI;
 
         // find the closest point on the path to the robot

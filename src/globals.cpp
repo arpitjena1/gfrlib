@@ -1,6 +1,6 @@
 #include "globals.hpp"
 
-pros::Controller master();
+pros::Controller master(pros::E_CONTROLLER_MASTER);
 //pistons
 gfr::Solenoid wings1('A');
 gfr::Solenoid wings2('B');
@@ -15,4 +15,4 @@ pros::Motor slapper(10,true);
 
 //sensors
 pros::ADIDigitalIn limit('A');
-pros::Optical opti;
+pros::Optical opti(10);

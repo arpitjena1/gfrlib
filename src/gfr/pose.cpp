@@ -109,3 +109,7 @@ gfr::Pose gfr::Pose::rotate(float angle) {
     return gfr::Pose(this->x * std::cos(angle) - this->y * std::sin(angle),
                         this->x * std::sin(angle) + this->y * std::cos(angle), this->theta);
 }
+
+gfr::Pose gfr::Pose::returnvalues(float val1, float val2){
+    return gfr::Pose(val1,val2,0);
+}

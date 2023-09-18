@@ -62,7 +62,7 @@ void turn(double target, double max, MoveFlags = NONE);
 void turn(double target, MoveFlags = NONE);
 
 void chainedmoveto(std::vector<Pose> points, double max, MoveFlags flags );
-void FollowPath(std::vector<gfr::Pose>* pPath, float timeOut, float errorRange, float beta, float zeta, bool reversed = false);
+void FollowPath(std::vector<gfr::Pose>* pPath, float timeOut, float errorRange, float beta, float zeta, bool reversed);
 /**
  * Turn to face a point
  */

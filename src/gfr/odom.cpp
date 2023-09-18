@@ -20,9 +20,11 @@ bool debug;
 
 gfr::Pose odompose(0,0,0);
 //odom pose
-Pose getPose(bool radians) {
-    if (radians) return odompose;
-    else return gfr::Pose(odompose.x, odompose.y, radToDeg(odompose.theta));
+Pose getPose(bool radians = false){
+	if(radians){
+		return odompose;
+	} else return gfr::Pose(odompose.x,odompose.y, radToDeg(odompose.theta));
+	
 }
 
 // tracker wheel configuration

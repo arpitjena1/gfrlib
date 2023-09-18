@@ -82,5 +82,7 @@ class Pose {
          * @return Pose
          */
         Pose rotate(float angle);
+
+        Pose returnvalues(float val1, float val2);
 };
 } // namespace gfr
