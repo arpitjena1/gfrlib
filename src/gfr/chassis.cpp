@@ -297,16 +297,9 @@ void turn(double target, MoveFlags flags) {
 }
 
 /**************************************************/
-// chained mtp
-
-void chainedmoveto(std::vector<Pose> points, double max, MoveFlags flags ){
-
-	
+// ramsete
 
 
-	
-
-}
 gfr::Pose keepvelcheck(0,0,0);
 void ramsete(gfr::Pose targetPose, gfr::Pose currentPose, float targetAngularVelocity, float targetLinearVelocity, float beta, float zeta) {
     // compute global error

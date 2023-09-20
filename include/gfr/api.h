@@ -13,3 +13,4 @@
 #include "gfr/config.h"
 #include "gfr/pneumatics.h"
 #include "stateMachine.h"
+#include "gfr/motionprofile.h"

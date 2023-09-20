@@ -16,6 +16,7 @@ extern double maxSpeed;
 extern std::shared_ptr<pros::Motor_Group> leftMotors;
 extern std::shared_ptr<pros::Motor_Group> rightMotors;
 
+void moveChassis(float linearVelocity, float angularVelocity);
 
 /**
  * Set the brake mode for all chassis motors
@@ -61,7 +62,6 @@ void turn(double target, double max, double exit_error, MoveFlags = NONE);
 void turn(double target, double max, MoveFlags = NONE);
 void turn(double target, MoveFlags = NONE);
 
-void chainedmoveto(std::vector<Pose> points, double max, MoveFlags flags );
 void FollowPath(std::vector<gfr::Pose>* pPath, float timeOut, float errorRange, float beta, float zeta, bool reversed);
 /**
  * Turn to face a point

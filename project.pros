@@ -393,6 +393,22 @@
                 "user_files": [],
                 "version": "3.4.90"
             },
+            "autoSelect": {
+                "location": "C:\\Users\\P2\\AppData\\Roaming\\PROS\\templates\\autoSelect@2.1.4",
+                "metadata": {
+                    "origin": "local"
+                },
+                "name": "autoSelect",
+                "py/object": "pros.conductor.templates.local_template.LocalTemplate",
+                "supported_kernels": "^3.2.1",
+                "system_files": [
+                    "include\\autoSelect\\selection.h",
+                    "firmware\\autoSelect.a"
+                ],
+                "target": "v5",
+                "user_files": [],
+                "version": "2.1.4"
+            },
             "kernel": {
                 "location": "C:\\Users\\P2\\AppData\\Roaming\\PROS\\templates\\kernel@3.8.0",
                 "metadata": {

@@ -10,6 +10,9 @@ class Pose {
         float y;
         /** @brief theta value*/
         float theta;
+        float linearVel;
+        float angularVel;
+        float pathDistance;
         /**
          * @brief Create a new pose
          *
