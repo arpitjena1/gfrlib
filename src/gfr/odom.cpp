@@ -23,7 +23,7 @@ gfr::Pose odompose(0,0,0);
 Pose getPose(bool radians = false){
 	if(radians){
 		return odompose;
-	} else return gfr::Pose(odompose.x,odompose.y, radToDeg(odompose.theta));
+	} else return gfr::Pose(odompose.x,odompose.y, gfr::util::radToDeg(odompose.theta));
 	
 }
 

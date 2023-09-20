@@ -77,7 +77,7 @@ float gfr::PID::update(float target, float position, bool log) {
     float error = target - position;
     float deltaError = error - prevError;
     float output = kF * target + kP * error + kI * totalError + kD * deltaError;
-    if (kA != 0) output = gfr::slew(output, prevOutput, kA);
+    if (kA != 0) output = gfr::util::slew(output, prevOutput, kA);
     prevOutput = output;
     prevError = error;
     totalError += error;

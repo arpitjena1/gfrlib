@@ -1,13 +1,13 @@
 #include "autonomous.hpp"
 
 
-ASSET (path_txt);
+//ASSET (path_txt);
 void autonomous() {
 	using namespace gfr;
 	using namespace gfr::chassis;
 
 	//pure pursuit
-	follow(path_txt,3000,10,true);
+	//follow(path_txt,3000,10,true);
 
 
 	//boomerang

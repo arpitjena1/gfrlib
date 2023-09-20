@@ -30,7 +30,7 @@ double distancecalc(Pose a , Pose b ){
 
 double anglecalc(Pose a, Pose b){
 	double targetAngle = atan2(b.y - a.y, b.x - a.x);
-	return radToDeg(targetAngle);
+	return gfr::util::radToDeg(targetAngle);
 	
 }
 double wrap180(double deg)

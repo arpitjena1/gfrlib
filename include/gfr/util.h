@@ -4,7 +4,7 @@
 
 #include <vector>
 
-namespace gfr {
+namespace gfr::util {
 /**
  * @brief Slew rate limiter
  *
