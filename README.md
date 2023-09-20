@@ -56,6 +56,19 @@ Want a different version of Eigen? Let us know by opening an issue [here](https:
 ```
 > Plug-in points and push back for the robot to follow the trajectory!
 
+### Motion Profiling
+```
+  
+//motion profile
+	std::vector<gfr::Pose> *motionprofileposes;
+	Pose posefirst = {1,2,3};
+	motionprofileposes->push_back(posefirst);
+
+	MotionProfile p(motionprofileposes, 30,30,30,10);
+
+```
+> Plug in points to move the robot using a smooth motion!
+
 ---
 #### _Contributions welcome. Anything missing? Send in a pull request. Thanks._
 Follow  ([@gaelforcev](https://instagram.com/gaelforcev)) on Instagram for updates.
