@@ -23,6 +23,9 @@ Want a different version of Eigen? Let us know by opening an issue [here](https:
  > Extended pneumatics class for solenoids &
  > State Machines
 
+## Odometry
+ > Extended Kalman Filter pose estimation algorithm for accurate odometry(still building)
+
 ## Movement Functions
 ### boomerang
  ```
