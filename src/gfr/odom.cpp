@@ -132,7 +132,7 @@ int odomTask() {
         //pose
         odompose.x = position.x;
         odompose.y = position.y;
-        odompose.theta = getHeading();
+        odompose.theta = getHeading(true);
 
 
 		if (debug)
