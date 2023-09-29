@@ -139,8 +139,7 @@ int odomTask() {
         //pose
         odompose.x = position.x;
         odompose.y = position.y;
-        odompose.theta = gfr::util::degToRad(p);
-
+        odompose.theta = getHeading();
 
 
 		if (debug)
