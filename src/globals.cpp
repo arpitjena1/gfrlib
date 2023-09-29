@@ -9,7 +9,7 @@ gfr::Solenoid intakep('C');
 
 //motors
 pros::Motor intake(9,true);
-pros::Motor slapper(10,true);
+pros::Motor slapperm(10,true);
 
 
 

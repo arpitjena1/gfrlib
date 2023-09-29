@@ -18,14 +18,8 @@ std::shared_ptr<pros::ADIEncoder> middleADIEncoder = nullptr;
 // output the odometry data to the terminal
 bool debug;
 
-gfr::Pose odompose(0,0,0);
+
 //odom pose
-Pose getPose(bool radians = false){
-	if(radians){
-		return odompose;
-	} else return gfr::Pose(odompose.x,odompose.y, gfr::util::radToDeg(odompose.theta));
-	
-}
 
 // tracker wheel configuration
 double track_width;
@@ -36,7 +30,16 @@ double middle_tpi;
 
 // odom position values
 Point position;
+gfr::Pose odompose(0,0,0);
 double heading;
+
+//get value
+Pose getPose(bool radians = false){
+	if(radians){
+		return odompose;
+	} else return gfr::Pose(odompose.x,odompose.y, gfr::util::radToDeg(odompose.theta));
+	
+}
 
 // previous values
 double prev_left_pos = 0;
@@ -80,6 +83,10 @@ int odomTask() {
 	position.x = 0;
 	position.y = 0;
 	heading = 0;
+	odompose.x = 0;
+	odompose.y = 0;
+	odompose.theta = 0;
+
 	while (true) {
 		// get positions of each encoder
 		double left_pos = getLeftEncoder();
@@ -132,7 +139,8 @@ int odomTask() {
         //pose
         odompose.x = position.x;
         odompose.y = position.y;
-        odompose.theta = getHeading();
+        odompose.theta = gfr::util::degToRad(p);
+
 
 
 		if (debug)
@@ -141,7 +149,11 @@ int odomTask() {
 		pros::delay(10);
 	}
 }
-
+double getHeading(bool radians) {
+	if (radians)
+		return heading;
+	return heading * 180 / M_PI;
+}
 void reset(Point point) {
 	position.x = point.x;
 	position.y = point.y;
@@ -159,11 +171,7 @@ Point getPosition() {
 	return position;
 }
 
-double getHeading(bool radians) {
-	if (radians)
-		return heading;
-	return heading * 180 / M_PI;
-}
+
 
 double getAngleError(Point point) {
 	double x = point.x;

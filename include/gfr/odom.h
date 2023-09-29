@@ -23,7 +23,7 @@ typedef struct config_data_s {
 extern std::shared_ptr<pros::Imu> imu;
 
 
-Pose getPose(bool radians);
+extern Pose getPose(bool radians);
 /**
  * Return the left encoder position
  */

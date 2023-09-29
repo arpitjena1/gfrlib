@@ -12,19 +12,19 @@ namespace gfr {
 // Negative numbers mean reversed motor
 #define LEFT_MOTORS 1, 2
 #define RIGHT_MOTORS -3, -4
-#define GEARSET pros::E_MOTOR_GEAR_200 // RPM of chassis motors
+#define GEARSET pros::E_MOTOR_GEAR_600 // RPM of chassis motors
 #define WHEEL_DIAM 3.25
 
 // Ticks per inch
-#define TPI 1      			  // Encoder ticks per inch of forward robot movement
-#define MIDDLE_TPI 1          // Ticks per inch for the middle wheel
+#define TPI 88.1473531      			  // Encoder ticks per inch of forward robot movement
+#define MIDDLE_TPI 0          // Ticks per inch for the middle wheel
 
 // Tracking wheel distances
-#define TRACK_WIDTH 0 		  // The distance between left and right wheels (or tracker wheels)
+#define TRACK_WIDTH 14 		  // The distance between left and right wheels (or tracker wheels)
 #define MIDDLE_DISTANCE 0     // Distance from middle wheel to the robot turning center
 
 // Sensors
-#define IMU_PORT 0                           // Port 0 for disabled
+#define IMU_PORT 20                         // Port 0 for disabled
 #define ENCODER_PORTS 0, 0, 0                // Port 0 for disabled,
 #define EXPANDER_PORT 0                      // Port 0 for disabled
 #define ENCODER_TYPE gfr::odom::ENCODER_ADI // The type of encoders

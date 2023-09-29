@@ -76,4 +76,6 @@ double avg(std::vector<double> values);
  */
 float ema(float current, float previous, float smooth);
 
+
+
 } // namespace gfr

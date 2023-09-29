@@ -123,6 +123,7 @@ double slew(double target_speed, double step, double current_speed) {
 	return current_speed;
 }
 
+
 /**************************************************/
 // settling
 bool settled() {
@@ -221,6 +222,81 @@ void move(std::vector<double> target, double max, double exit_error, double lp,
 		if (!(flags & THRU))
 			chassis::setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 	}
+}
+float getCurvature(gfr::Pose pose, gfr::Pose other) {
+
+    // calculate whether the pose is on the left or right side of the circle
+    float side = gfr::util::sgn(std::sin(pose.theta) * (other.x - pose.x) - std::cos(pose.theta) * (other.y - pose.y));
+    // calculate center point and radius
+    float a = -std::tan(pose.theta);
+    float c = std::tan(pose.theta) * pose.x - pose.y;
+    float x = std::fabs(a * other.x + other.y + c) / std::sqrt((a * a) + 1);
+    float d = std::hypot(other.x - pose.x, other.y - pose.y);
+
+    // return curvature
+    return side * ((2 * x) / (d * d));
+}
+void move(float x, float y, float theta, bool forwards, int timeout, float chasePower, float lead, float maxSpeed){
+	Pose target(x, y, M_PI - gfr::util::degToRad(theta));
+	gfr::PID linearPID = PID(0, 0, LINEAR_KP, 0, LINEAR_KD, "linearPID"); // linear PID controller
+    gfr::PID angularPID = PID(0, 0, ANGULAR_KP, 0, ANGULAR_KD, "angularPID"); // angular PID controller
+
+	if (!forwards) target.theta = fmod(target.theta + M_PI, 2 * M_PI); // backwards movement
+	bool close = false; // used for settling
+	// main loop
+    while (true) {
+        // get current pose
+        Pose pose = gfr::odom::getPose(true);
+        if (!forwards) pose.theta += M_PI;
+        pose.theta = M_PI - pose.theta; // convert to standard form
+
+        // check if the robot is close enough to the target to start settling
+        if (pose.distance(target) < 7.5) close = true;
+
+        // calculate the carrot point
+        Pose carrot = target - (Pose(cos(target.theta), sin(target.theta)) * lead * pose.distance(target));
+        if (close) carrot = target; // settling behavior
+
+        // calculate error
+        float angularError = gfr::util::angleError(pose.angle(carrot), pose.theta, true); // angular error
+        float linearError = pose.distance(carrot) * cos(angularError); // linear error
+        if (close) angularError = gfr::util::angleError(target.theta, pose.theta, true); // settling behavior
+        if (!forwards) linearError = -linearError;
+
+        // get PID outputs
+        float angularPower = -angularPID.update(gfr::util::radToDeg(angularError), 0);
+        float linearPower = linearPID.update(linearError, 0);
+
+        // calculate radius of turn
+        float curvature = fabs(getCurvature(pose, carrot));
+        if (curvature == 0) curvature = -1;
+        float radius = 1 / curvature;
+
+        // calculate the maximum speed at which the robot can turn
+        // using the formula v = sqrt( u * r * g )
+        if (radius != -1) {
+            float maxTurnSpeed = sqrt(chasePower * radius * 9.8);
+            // the new linear power is the minimum of the linear power and the max turn speed
+            if (linearPower > maxTurnSpeed && !close) linearPower = maxTurnSpeed;
+            else if (linearPower < -maxTurnSpeed && !close) linearPower = -maxTurnSpeed;
+        }
+
+        // prioritize turning over moving
+        float overturn = fabs(angularPower) + fabs(linearPower) - maxSpeed;
+        if (overturn > 0) linearPower -= linearPower > 0 ? overturn : -overturn;
+
+        // calculate motor powers
+        float leftPower = linearPower + angularPower;
+        float rightPower = linearPower - angularPower;
+
+        // move the motors
+        gfr::chassis::leftMotors->move(leftPower);
+        gfr::chassis::rightMotors->move(rightPower);
+
+        pros::delay(10); // delay to save resources
+	}
+	gfr::chassis::leftMotors->move(0);
+    gfr::chassis::rightMotors->move(0);
 }
 
 void move(std::vector<double> target, double max, double exit_error,
@@ -401,6 +477,8 @@ void turn(Point target, double max, MoveFlags flags) {
 void turn(Point target, MoveFlags flags) {
 	turn(target, 100, angular_exit_error, -1, flags);
 }
+
+
 
 /**************************************************/
 // task control

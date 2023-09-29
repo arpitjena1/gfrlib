@@ -36,8 +36,6 @@
 
 #include "api.h"
 #include "gfr/api.h"
-#include "autonomous.hpp"
-#include "driver.hpp"
 #include "globals.hpp"
 #include "autoSelect/selection.h"
 

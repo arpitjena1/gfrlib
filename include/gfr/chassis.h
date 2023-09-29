@@ -36,6 +36,7 @@ void waitUntilFinished(double exit_error);
 /**
  * Perform 2D chassis movement
  */
+void move(float x, float y, float theta, bool forwards, int timeout, float chasePower, float lead, float maxSpeed);
 void move(std::vector<double> target, double max, double exit_error,
           double lp, double ap, MoveFlags = NONE);
 void move(std::vector<double> target, double max, double exit_error,
